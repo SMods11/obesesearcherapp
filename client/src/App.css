@@ -1,0 +1,15 @@
+.App-Banner {
+  overflow: hidden;
+  text-align: center;
+  background-color: #f1f1f1;
+  width: 100%;
+  top: 0;
+}
+
+.App-Obese {
+  text-align: center;
+}
+
+.App-link {
+  color: #61dafb;
+}
