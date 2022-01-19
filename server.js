@@ -33,7 +33,7 @@ bot.on('chat', (username, message) => {
             bot.chat("/login " + loginCode + " " + captcha)
             logged = true;
             log("Successfully logged !")
-        }, milisecondeBeforeLogin);
+        }, milisecondeBeforeLogin)
     }
 })
 
@@ -109,10 +109,10 @@ app.get("/api/:methods", (req, res) => {
 })
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client/build')));
-  app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-  });
+    app.use(express.static(path.join(__dirname, 'client/build')));
+    app.get('*', function(req, res) {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
 }
 
 app.listen(port)
