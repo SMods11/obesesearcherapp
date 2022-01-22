@@ -5,7 +5,7 @@ const path = require('path')
 
 const bot = mineflayer.createBot({
     host: 'play.rinaorc.com',
-    username: 'ObeseSearcher123',
+    username: 'Nigeriaann4',
     version: '1.8.9'
 })
 
@@ -24,14 +24,34 @@ const app = express()
 bot.on('chat', (username, message) => {
     if(message.includes("register")) {
         bot.chat("/register " + loginCode)
+        console.log("Successfully registered !")
     } if (message.includes("login")) {
         setTimeout(function() {
             bot.chat("/login " + loginCode)
             logged = true;
-            log("Successfully logged !")
+            console.log("Successfully logged !")
         }, milisecondeBeforeLogin)
     }
 })
+
+/* LOOP MOVEMENT */
+let lastControlState = 0
+let controleStateArray = ['forward', 'back', 'left', 'right']
+
+function movement() {
+    if(logged) {
+        lastControlState++
+        if(lastControlState > 3) {
+            lastControlState = 0
+        }
+        console.log(controleStateArray[lastControlState])
+        bot.setControlState(controleStateArray[lastControlState], true)
+        setTimeout(function() {
+            bot.clearControlStates()
+        }, 2000)
+    }
+}
+setInterval(movement, 3*60*1000)
 
 /* LOOP CHECKER */
 function obese() {
@@ -39,11 +59,11 @@ function obese() {
         if (obeseChecked >= obesePersonToCheck.length) {
             obeseChecked = 0;
         }
-        bot.chat("/party invite " + obesePersonToCheck[obeseChecked])
+        bot.chat("/ignore " + obesePersonToCheck[obeseChecked])
         obeseChecked++;
     }
 }
-setInterval(obese, 1500);
+setInterval(obese, 1500)
 
 /* LOOP RECEIVER */
 bot.on('message', jsonMsg => {
@@ -51,28 +71,27 @@ bot.on('message', jsonMsg => {
     const actualPerson = obesePersonToCheck[obeseChecked - 1]
     const actualPersonIndex = obesePersonToCheck.indexOf(actualPerson)
     if (logged) {
-        if (message.includes("Joueur hors-ligne")) {
+        if (message.includes("Joueur introuvable")) {
             if (obesePerson.includes(actualPerson)) {
                 obesePerson.splice(actualPersonIndex, 1)
             }
         }
-        if (message.includes("Joueur déjà dans un groupe")) {
+        if (message.includes("n'ignorez plus les messages")) {
             if(!obesePerson.includes(actualPerson)) {
                 obesePerson.push(actualPerson)
             }
         }
-        if (message.includes("vient d'inviter")) {
+        if (message.includes("ignorez désormais les messages")) {
             if(!obesePerson.includes(actualPerson)) {
                 obesePerson.push(actualPerson)
             }
         }
     }
 })
-
-/* LOGGER */
-function log(message) {
-    console.log("[" + bot.username + "]" + " : " + message)
-}
+/* SET LOGIN METHOD */
+bot.on('windowOpen', (window) => {
+    bot.clickWindow(11, 0, 0)
+})
 
 /* ERROR HANDLER */
 bot.on('kicked', console.log)
