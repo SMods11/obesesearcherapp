@@ -23,14 +23,10 @@ const app = express()
 /* LOGIN */
 bot.on('chat', (username, message) => {
     if(message.includes("register")) {
-        const captcha = message.split(" ")[2].replaceAll("\"", "")
-        console.log("Captcha code found : " + captcha)
-        bot.chat("/register " + loginCode + " " + captcha)
+        bot.chat("/register " + loginCode)
     } if (message.includes("login")) {
-        const captcha = message.split(" ")[2].replaceAll("\"", "")
-        log("Captcha code found : " + captcha)
         setTimeout(function() {
-            bot.chat("/login " + loginCode + " " + captcha)
+            bot.chat("/login " + loginCode)
             logged = true;
             log("Successfully logged !")
         }, milisecondeBeforeLogin)
